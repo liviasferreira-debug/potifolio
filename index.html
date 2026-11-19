@@ -2,501 +2,842 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lívia | Projetos de Automação</title>
-  <meta name="description" content="Portfólio de Lívia com projetos de automação.">
-  <meta name="color-scheme" content="light dark">
-
-  <!-- Aplica o tema salvo (ou o do sistema) antes de renderizar, evitando "piscar" -->
-  <script>
-    (function () {
-      var tema = null;
-      try { tema = localStorage.getItem("tema"); } catch (e) {}
-      if (tema !== "claro" && tema !== "escuro") {
-        tema = window.matchMedia("(prefers-color-scheme: dark)").matches ? "escuro" : "claro";
-      }
-      document.documentElement.setAttribute("data-tema", tema);
-    })();
-  </script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfólio de Lívia — Engenharia de Automação, RPA e Integrações.">
+  <title>Lívia | Engenharia de Automação</title>
+  
   <style>
-    /* ==========================================================
-       1. VARIÁVEIS DE COR (TEMAS)
-       ========================================================== */
-    :root,
-    :root[data-tema="claro"] {
-      --bg: #f7f5fb;
-      --superficie: #ffffff;
-      --texto: #1f1b2e;
-      --texto-suave: #5a5470;
-      --borda: #ded8ee;
-      --destaque: #6d28d9;          /* roxo principal */
-      --destaque-hover: #5b21b6;
-      --nav-bg: #5b21b6;            /* fundo do menu */
-      --nav-texto: #ffffff;
-      --tag-bg: #ede9fe;
-      --tag-texto: #4c1d95;
-      --sombra: 0 2px 10px rgba(76, 29, 149, 0.10);
-      --foco: #f59e0b;
+    /* ==========================================================================
+       1. VARIÁVEIS DE CORES E TEMAS (Claro e Escuro)
+       ========================================================================== */
+    :root {
+      /* Paleta Roxa */
+      --purple-900: #3b0764;
+      --purple-800: #581c87;
+      --purple-700: #6b21a8;
+      --purple-600: #7e22ce;
+      --purple-500: #9333ea;
+      --purple-400: #c084fc;
+      --purple-100: #f3e8ff;
+      --purple-50:  #faf5ff;
+
+      /* Menu em tom roxo */
+      --nav-bg: rgba(88, 28, 135, 0.94);
+      --nav-border: rgba(255, 255, 255, 0.14);
+      --nav-text: #ffffff;
+
+      /* Tema Claro */
+      --bg-body: #fafafa;
+      --bg-dot: #e4e4e7;
+      --bg-surface: #ffffff;
+      --bg-surface-alt: #f4f4f5;
+      --text-main: #18181b;
+      --text-muted: #52525b;
+      --border-color: #e4e4e7;
+      --accent: var(--purple-700);
+      --accent-soft: var(--purple-100);
+      --accent-text: var(--purple-800);
+      --glow-color: rgba(147, 51, 234, 0.14);
+      --shadow-card: 0 10px 25px -5px rgba(24, 24, 27, 0.06), 0 4px 10px -4px rgba(24, 24, 27, 0.04);
+      --shadow-hover: 0 20px 30px -10px rgba(107, 33, 168, 0.18);
+      --focus-ring: var(--purple-500);
     }
 
-    :root[data-tema="escuro"] {
-      --bg: #130f1f;
-      --superficie: #1d1730;
-      --texto: #efeaff;
-      --texto-suave: #b4abd1;
-      --borda: #3a2f5c;
-      --destaque: #a78bfa;
-      --destaque-hover: #c4b5fd;
-      --nav-bg: #3b1a7a;
-      --nav-texto: #ffffff;
-      --tag-bg: #2e2250;
-      --tag-texto: #ddd3ff;
-      --sombra: 0 2px 12px rgba(0, 0, 0, 0.45);
-      --foco: #fbbf24;
+    [data-theme="dark"] {
+      /* Menu em tom roxo escuro */
+      --nav-bg: rgba(59, 7, 100, 0.92);
+      --nav-border: rgba(192, 132, 252, 0.2);
+      --nav-text: #faf5ff;
+
+      /* Tema Escuro */
+      --bg-body: #09090b;
+      --bg-dot: #27272a;
+      --bg-surface: #121216;
+      --bg-surface-alt: #18181f;
+      --text-main: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --border-color: #27272a;
+      --accent: var(--purple-400);
+      --accent-soft: rgba(147, 51, 234, 0.16);
+      --accent-text: #e9d5ff;
+      --glow-color: rgba(147, 51, 234, 0.22);
+      --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+      --shadow-hover: 0 20px 35px -10px rgba(147, 51, 234, 0.28);
+      --focus-ring: var(--purple-400);
     }
 
-    /* ==========================================================
-       2. BASE
-       ========================================================== */
-    * { box-sizing: border-box; }
+    /* ==========================================================================
+       2. RESET E FUNDO TEXTURIZADO
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+    }
 
     body {
-      margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      line-height: 1.6;
-      background: var(--bg);
-      color: var(--texto);
-      transition: background 0.25s, color 0.25s;
+      background-color: var(--bg-body);
+      /* Grade pontilhada sutil para remeter a blueprints/automação */
+      background-image: radial-gradient(var(--bg-dot) 1px, transparent 1px);
+      background-size: 24px 24px;
+      color: var(--text-main);
+      line-height: 1.65;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
-    a { color: var(--destaque); }
-    a:hover { color: var(--destaque-hover); }
-
     :focus-visible {
-      outline: 3px solid var(--foco);
+      outline: 3px solid var(--focus-ring);
       outline-offset: 2px;
     }
 
     .container {
-      width: min(1100px, 100% - 2rem);
-      margin-inline: auto;
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
     }
 
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      overflow: hidden;
-      clip: rect(0 0 0 0);
-      white-space: nowrap;
-    }
-
-    .pular-conteudo {
-      position: absolute;
-      left: -999px;
-      top: 0;
-      background: var(--superficie);
-      color: var(--texto);
-      padding: 0.5rem 1rem;
-      z-index: 100;
-    }
-    .pular-conteudo:focus { left: 0; }
-
-    /* ==========================================================
-       3. MENU DE NAVEGAÇÃO (ROXO)
-       ========================================================== */
-    .nav {
+    /* ==========================================================================
+       3. BARRA DE NAVEGAÇÃO (Menu Roxo com Blur)
+       ========================================================================== */
+    .navbar {
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--nav-border);
+      color: var(--nav-text);
       position: sticky;
       top: 0;
-      z-index: 50;
-      background: var(--nav-bg);
-      color: var(--nav-texto);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      z-index: 100;
     }
 
-    .nav .container {
+    .navbar-content {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem 1rem;
-      padding-block: 0.75rem;
-    }
-
-    .nav__marca {
-      font-weight: 700;
-      font-size: 1.2rem;
-      color: var(--nav-texto);
-      text-decoration: none;
-    }
-
-    .nav__lista {
-      display: flex;
-      flex-wrap: wrap;
       align-items: center;
-      gap: 0.25rem;
-      list-style: none;
-      margin: 0;
-      padding: 0;
+      height: 4.25rem;
     }
 
-    .nav__lista a {
-      display: inline-block;
-      padding: 0.4rem 0.8rem;
-      border-radius: 999px;
-      color: var(--nav-texto);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .nav__lista a:hover {
-      background: rgba(255, 255, 255, 0.18);
-      color: var(--nav-texto);
-    }
-
-    .nav :focus-visible { outline-color: #ffffff; }
-
-    .botao-tema {
+    .brand {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      padding: 0.4rem 0.9rem;
-      border: 2px solid rgba(255, 255, 255, 0.7);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--nav-texto);
-      font: inherit;
+      gap: 0.6rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--nav-text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e9d5ff;
+      box-shadow: 0 0 10px #e9d5ff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 0.5rem;
+    }
+
+    .nav-links a {
+      color: var(--nav-text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.92rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 9999px;
+      transition: background-color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      background-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .theme-toggle {
+      background-color: rgba(255, 255, 255, 0.14);
+      color: var(--nav-text);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 0.45rem 0.95rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.2s ease;
     }
 
-    .botao-tema:hover { background: rgba(255, 255, 255, 0.18); }
+    .theme-toggle:hover {
+      background-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
 
-    /* ==========================================================
-       4. CABEÇALHO / APRESENTAÇÃO
-       ========================================================== */
+    /* ==========================================================================
+       4. CABEÇALHO / HERO SECTION
+       ========================================================================== */
     .hero {
-      padding-block: 4rem 3rem;
-      border-bottom: 1px solid var(--borda);
+      position: relative;
+      padding: 5rem 0 4rem;
+      overflow: hidden;
     }
 
-    .hero__ola {
-      margin: 0;
-      color: var(--destaque);
+    /* Brilho roxo suave de fundo */
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--accent-soft);
+      color: var(--accent-text);
+      border: 1px solid rgba(147, 51, 234, 0.25);
       font-weight: 600;
+      font-size: 0.82rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      margin-bottom: 1.25rem;
     }
 
     .hero h1 {
-      margin: 0.25rem 0 1rem;
-      font-size: clamp(2.2rem, 6vw, 3.5rem);
-      line-height: 1.15;
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.035em;
     }
 
-    .hero p {
-      max-width: 60ch;
-      margin: 0 0 1.5rem;
-      color: var(--texto-suave);
-      font-size: 1.1rem;
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--purple-600), var(--purple-400));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .botao {
-      display: inline-block;
-      padding: 0.7rem 1.4rem;
-      border-radius: 8px;
-      background: var(--nav-bg);
+    .hero-desc {
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      max-width: 580px;
+      margin-bottom: 2rem;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple-700), var(--purple-600));
       color: #ffffff;
       text-decoration: none;
       font-weight: 600;
-    }
-    .botao:hover { background: var(--destaque-hover); color: #ffffff; }
-    :root[data-tema="escuro"] .botao:hover { background: #5b2db5; }
-
-    /* ==========================================================
-       5. SEÇÕES E GRADE DE PROJETOS
-       ========================================================== */
-    .secao { padding-block: 3rem; }
-
-    .secao h2 {
-      margin: 0 0 0.5rem;
-      font-size: clamp(1.5rem, 4vw, 2rem);
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.6rem;
+      box-shadow: 0 4px 14px rgba(107, 33, 168, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .secao__intro {
-      margin: 0 0 2rem;
-      color: var(--texto-suave);
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(107, 33, 168, 0.45);
     }
 
-    .grade {
-      display: grid;
-      gap: 1.25rem;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    .btn-secondary {
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.6rem;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
     }
 
-    .card {
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background-color: var(--bg-surface-alt);
+    }
+
+    /* Card ilustrativo de fluxo automatizado no Hero */
+    .workflow-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .workflow-header {
       display: flex;
-      flex-direction: column;
-      background: var(--superficie);
-      border: 1px solid var(--borda);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: var(--sombra);
-      transition: transform 0.2s;
-    }
-    .card:hover { transform: translateY(-3px); }
-
-    .card__img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .card__corpo {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      padding: 1.25rem;
-    }
-
-    .card h3 { margin: 0 0 0.5rem; font-size: 1.15rem; }
-
-    .card p {
-      margin: 0 0 1rem;
-      color: var(--texto-suave);
-      flex: 1;
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      list-style: none;
-      margin: 0 0 1rem;
-      padding: 0;
-    }
-
-    .tags li {
-      padding: 0.15rem 0.6rem;
-      border-radius: 999px;
-      background: var(--tag-bg);
-      color: var(--tag-texto);
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
       font-size: 0.8rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: var(--text-muted);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-r { background: #f87171; }
+    .dot-y { background: #fbbf24; }
+    .dot-g { background: #34d399; }
+
+    .workflow-step {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      background-color: var(--bg-surface-alt);
+      border: 1px solid var(--border-color);
+      padding: 0.75rem 1rem;
+      border-radius: 0.65rem;
+      font-size: 0.88rem;
       font-weight: 600;
     }
 
-    .card__link { font-weight: 600; }
-
-    /* ==========================================================
-       6. RODAPÉ
-       ========================================================== */
-    .rodape {
-      margin-top: 2rem;
-      padding-block: 1.5rem;
-      border-top: 1px solid var(--borda);
-      color: var(--texto-suave);
-      text-align: center;
-      font-size: 0.9rem;
+    .workflow-step-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 0.5rem;
+      background-color: var(--accent-soft);
+      color: var(--accent-text);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      * { transition: none !important; scroll-behavior: auto !important; }
+    .workflow-connector {
+      width: 2px;
+      height: 16px;
+      background: linear-gradient(to bottom, var(--purple-500), var(--purple-400));
+      margin: 0 auto;
+    }
+
+    /* ==========================================================================
+       5. SEÇÃO DE PROJETOS E CARDS MODERNOS
+       ========================================================================== */
+    main {
+      flex: 1;
+    }
+
+    .section {
+      padding: 4.5rem 0;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2.75rem;
+    }
+
+    .section-kicker {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      max-width: 500px;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .project-card {
+      position: relative;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 1.75rem;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    /* Barra superior roxa sutil que acende no hover */
+    .project-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--purple-700), var(--purple-400));
+      opacity: 0.35;
+      transition: opacity 0.25s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--accent);
+    }
+
+    .project-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 0.75rem;
+      background-color: var(--accent-soft);
+      color: var(--accent-text);
+      display: grid;
+      place-items: center;
+    }
+
+    .card-index {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      background-color: var(--bg-surface-alt);
+      padding: 0.2rem 0.6rem;
+      border-radius: 0.4rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .project-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.65rem;
+      color: var(--text-main);
+      letter-spacing: -0.015em;
+    }
+
+    .project-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tech-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+
+    .tech-tag {
+      background-color: var(--bg-surface-alt);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+    }
+
+    .project-footer {
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: gap 0.2s ease;
+    }
+
+    .project-link:hover {
+      gap: 0.65rem;
+      text-decoration: underline;
+    }
+
+    .project-private {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ==========================================================================
+       6. RODAPÉ
+       ========================================================================== */
+    footer {
+      background-color: var(--bg-surface);
+      border-top: 1px solid var(--border-color);
+      padding: 2.5rem 0;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.25rem;
+    }
+
+    .footer-links a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    /* ==========================================================================
+       7. RESPONSIVIDADE
+       ========================================================================== */
+    @media (max-width: 860px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .workflow-card {
+        max-width: 480px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .nav-links {
+        display: none;
+      }
+      .hero {
+        padding: 3.25rem 0 2.5rem;
+      }
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
     }
   </style>
 </head>
-
 <body>
-  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
 
-  <!-- ===================== MENU ===================== -->
-  <header>
-    <nav class="nav" aria-label="Navegação principal">
-      <div class="container">
-        <a class="nav__marca" href="#inicio">Lívia</a>
-
-        <ul class="nav__lista">
+  <!-- BARRA DE NAVEGAÇÃO EM ROXO -->
+  <nav class="navbar" aria-label="Navegação principal">
+    <div class="container navbar-content">
+      <a href="#inicio" class="brand">
+        <span class="brand-dot" aria-hidden="true"></span>
+        Lívia
+      </a>
+      
+      <div class="nav-actions">
+        <ul class="nav-links">
           <li><a href="#inicio">Início</a></li>
           <li><a href="#projetos">Projetos</a></li>
-          <!-- NOVAS SEÇÕES: adicione aqui um <li><a href="#id-da-secao">…</a></li> -->
-          <li>
-            <button type="button" class="botao-tema" id="botaoTema" aria-pressed="false" aria-label="Ativar tema escuro">
-              <span id="iconeTema" aria-hidden="true">🌙</span>
-              <span id="textoTema">Escuro</span>
-            </button>
-          </li>
+          <li><a href="#contato">Contato</a></li>
+          <!-- ADICIONE NOVOS LINKS DE SEÇÃO AQUI -->
         </ul>
+
+        <button 
+          type="button" 
+          id="theme-toggle" 
+          class="theme-toggle" 
+          aria-pressed="false"
+          aria-label="Alternar entre tema claro e escuro">
+          <span id="theme-icon" aria-hidden="true">🌙</span>
+          <span id="theme-label">Escuro</span>
+        </button>
       </div>
-    </nav>
+    </div>
+  </nav>
+
+  <!-- CABEÇALHO / APRESENTAÇÃO -->
+  <header id="inicio" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="hero-pill">⚡ Automação de Processos &amp; RPA</span>
+        <h1>Olá, sou a <span>Lívia</span>.</h1>
+        <p class="hero-desc">
+          Transformo rotinas manuais e repetitivas em fluxos autônomos, confiáveis e escaláveis usando scripts inteligentes, bots e integrações via API.
+        </p>
+        <div class="hero-cta-group">
+          <a href="#projetos" class="btn-primary">Explorar Projetos</a>
+          <a href="#contato" class="btn-secondary">Entrar em Contato</a>
+        </div>
+      </div>
+
+      <!-- Diagrama visual decorativo de automação -->
+      <aside class="workflow-card" aria-label="Exemplo visual de fluxo automatizado">
+        <div class="workflow-header">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+          <span style="margin-left: 0.4rem;">pipeline_automacao.py</span>
+        </div>
+
+        <div class="workflow-step">
+          <div class="workflow-step-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div>
+            <div>1. Gatilho Agendado / Webhook</div>
+            <small style="color: var(--text-muted); font-weight: 400;">Captura automática de eventos</small>
+          </div>
+        </div>
+
+        <div class="workflow-connector" aria-hidden="true"></div>
+
+        <div class="workflow-step">
+          <div class="workflow-step-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg>
+          </div>
+          <div>
+            <div>2. Processamento &amp; Validação</div>
+            <small style="color: var(--text-muted); font-weight: 400;">Tratamento de dados sem erro humano</small>
+          </div>
+        </div>
+
+        <div class="workflow-connector" aria-hidden="true"></div>
+
+        <div class="workflow-step">
+          <div class="workflow-step-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <div>3. Entrega &amp; Notificação</div>
+            <small style="color: var(--text-muted); font-weight: 400;">Relatórios e alertas em tempo real</small>
+          </div>
+        </div>
+      </aside>
+    </div>
   </header>
 
-  <main id="conteudo">
-
-    <!-- ===================== APRESENTAÇÃO ===================== -->
-    <section class="hero" id="inicio" aria-labelledby="titulo-inicio">
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main>
+    <section id="projetos" class="section" aria-labelledby="titulo-projetos">
       <div class="container">
-        <p class="hero__ola">Olá, eu sou</p>
-        <h1 id="titulo-inicio">Lívia</h1>
-        <!-- EXEMPLO: substitua pela sua apresentação real -->
-        <p>
-          Eu transformo tarefas repetitivas em processos automáticos. Aqui você encontra
-          alguns dos meus projetos de automação, feitos para economizar tempo e reduzir erros.
-        </p>
-        <a class="botao" href="#projetos">Ver projetos</a>
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">Portfólio</span>
+            <h2 id="titulo-projetos" class="section-title">Projetos de Automação</h2>
+          </div>
+          <p class="section-subtitle">
+            Soluções desenvolvidas para economizar horas operacionais e integrar sistemas distintos.
+          </p>
+        </div>
+
+        <!-- Grade preenchida via JavaScript -->
+        <div id="projects-container" class="projects-grid"></div>
       </div>
     </section>
 
-    <!-- ===================== PROJETOS ===================== -->
-    <section class="secao" id="projetos" aria-labelledby="titulo-projetos">
-      <div class="container">
-        <h2 id="titulo-projetos">Projetos de automação</h2>
-        <p class="secao__intro">Uma seleção dos projetos em que venho trabalhando.</p>
-
-        <div class="grade" id="gradeProjetos"></div>
-      </div>
-    </section>
-
-    <!-- NOVAS SEÇÕES: copie o bloco <section class="secao" id="…"> acima e ajuste o conteúdo -->
-
+    <!-- ADICIONE NOVAS SEÇÕES AQUI (ex: Habilidades, Experiência, Sobre) -->
   </main>
 
-  <!-- ===================== RODAPÉ ===================== -->
-  <footer class="rodape">
-    <div class="container">
-      <p>© <span id="ano"></span> Lívia. Todos os direitos reservados.</p>
+  <!-- RODAPÉ -->
+  <footer id="contato">
+    <div class="container footer-content">
+      <p>© <span id="current-year"></span> <strong>Lívia</strong> — Portfólio de Automação.</p>
+      <div class="footer-links">
+        <a href="https://github.com/seu-usuario" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://linkedin.com/in/seu-usuario" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="mailto:seu-email@exemplo.com">E-mail</a>
+      </div>
     </div>
   </footer>
 
   <script>
-    /* ==========================================================
-       LISTA DE PROJETOS
-       Para adicionar um projeto, inclua um novo objeto no array.
-       Campos:
-         titulo      (obrigatório)
-         descricao   (obrigatório)
-         tecnologias (lista de textos)
-         link        (opcional) URL do projeto ou repositório
-         imagem      (opcional) URL/caminho de uma imagem
-         alt         (obrigatório se houver imagem) texto alternativo
-       ========================================================== */
+    /* ==========================================================================
+       1. ARRAY DE PROJETOS (Edite aqui para atualizar o portfólio)
+       ========================================================================== */
     const projetos = [
-      // EXEMPLOS: substitua pelos seus projetos reais
       {
-        titulo: "Relatórios automáticos por e-mail",
-        descricao: "Exemplo: script que coleta dados de planilhas, gera um relatório semanal e envia por e-mail à equipe.",
-        tecnologias: ["Python", "Pandas", "SMTP"],
-        link: "https://github.com/"
+        titulo: "[Exemplo] Conciliação Financeira Automatizada",
+        descricao: "Robô que extrai extratos bancários diariamente, cruza os lançamentos com planilhas internas e envia um resumo de divergências por e-mail.",
+        tecnologias: ["Python", "Pandas", "SMTP", "Cron"],
+        link: "https://github.com/seu-usuario/projeto-conciliacao" // Opcional: deixe "" se não tiver link
       },
       {
-        titulo: "Organizador de arquivos",
-        descricao: "Exemplo: rotina que separa e renomeia arquivos baixados por tipo e data, mantendo as pastas em ordem.",
-        tecnologias: ["Python", "Shell"]
+        titulo: "[Exemplo] Triagem Inteligente de Chamados",
+        descricao: "Integração via webhooks entre formulários, Slack e Trello que classifica demandas por urgência e distribui cartões automaticamente para o time.",
+        tecnologias: ["Node.js", "REST API", "Webhooks", "n8n"],
+        link: "https://github.com/seu-usuario/triagem-chamados"
       },
       {
-        titulo: "Bot de notificações",
-        descricao: "Exemplo: bot que monitora um serviço e avisa no chat quando algo muda ou falha.",
-        tecnologias: ["Node.js", "API", "Webhooks"],
-        link: "https://github.com/"
+        titulo: "[Exemplo] Coletor Automático de Notas Fiscais",
+        descricao: "Automação de navegador (RPA) que acessa portais fiscais, baixa arquivos XML emitidos no período e organiza tudo em pastas na nuvem.",
+        tecnologias: ["Python", "Playwright", "Google Drive API"],
+        link: "" // Exemplo sem link público
       }
-      // ADICIONE NOVOS PROJETOS AQUI (lembre da vírgula após o item anterior)
+      // ADICIONE NOVOS PROJETOS AQUI SEGUINDO O MODELO:
+      // {
+      //   titulo: "Título do Projeto",
+      //   descricao: "Descrição objetiva do problema resolvido e resultado obtido.",
+      //   tecnologias: ["Tech 1", "Tech 2"],
+      //   link: "https://github.com/seu-usuario/repositorio"
+      // },
     ];
 
-    /* ==========================================================
-       RENDERIZAÇÃO DOS CARDS
-       ========================================================== */
-    function criarCard(projeto) {
-      const card = document.createElement("article");
-      card.className = "card";
-
-      if (projeto.imagem) {
-        const img = document.createElement("img");
-        img.className = "card__img";
-        img.src = projeto.imagem;
-        img.alt = projeto.alt || "";
-        img.loading = "lazy";
-        card.appendChild(img);
-      }
-
-      const corpo = document.createElement("div");
-      corpo.className = "card__corpo";
-
-      const titulo = document.createElement("h3");
-      titulo.textContent = projeto.titulo;
-      corpo.appendChild(titulo);
-
-      const descricao = document.createElement("p");
-      descricao.textContent = projeto.descricao;
-      corpo.appendChild(descricao);
-
-      if (projeto.tecnologias && projeto.tecnologias.length) {
-        const lista = document.createElement("ul");
-        lista.className = "tags";
-        lista.setAttribute("aria-label", "Tecnologias utilizadas");
-        projeto.tecnologias.forEach(function (tec) {
-          const item = document.createElement("li");
-          item.textContent = tec;
-          lista.appendChild(item);
-        });
-        corpo.appendChild(lista);
-      }
-
-      if (projeto.link) {
-        const a = document.createElement("a");
-        a.className = "card__link";
-        a.href = projeto.link;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-        a.textContent = "Ver projeto →";
-        a.setAttribute("aria-label", "Ver projeto " + projeto.titulo + " (abre em nova aba)");
-        corpo.appendChild(a);
-      }
-
-      card.appendChild(corpo);
-      return card;
-    }
-
+    /* ==========================================================================
+       2. RENDERIZAÇÃO DOS CARDS DE PROJETO
+       ========================================================================== */
     function renderizarProjetos() {
-      const grade = document.getElementById("gradeProjetos");
-      grade.innerHTML = "";
-      projetos.forEach(function (p) { grade.appendChild(criarCard(p)); });
+      const container = document.getElementById("projects-container");
+      container.innerHTML = "";
+
+      projetos.forEach((projeto, index) => {
+        const card = document.createElement("article");
+        card.className = "project-card";
+
+        // Número formatado (01, 02, 03...)
+        const numero = String(index + 1).padStart(2, "0");
+
+        const tagsHTML = projeto.tecnologias
+          .map((tech) => `<li class="tech-tag">${tech}</li>`)
+          .join("");
+
+        const linkHTML = projeto.link
+          ? `<a href="${projeto.link}" class="project-link" target="_blank" rel="noopener noreferrer">
+               Ver projeto <span aria-hidden="true">→</span>
+             </a>`
+          : `<span class="project-private">Projeto interno / privado</span>`;
+
+        card.innerHTML = `
+          <div>
+            <div class="card-top">
+              <div class="card-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="16 18 22 12 16 6"></polyline>
+                  <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+              </div>
+              <span class="card-index">#${numero}</span>
+            </div>
+            <h3 class="project-title">${projeto.titulo}</h3>
+            <p class="project-desc">${projeto.descricao}</p>
+          </div>
+
+          <div>
+            <ul class="tech-list" aria-label="Tecnologias utilizadas">
+              ${tagsHTML}
+            </ul>
+            <div class="project-footer">
+              ${linkHTML}
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
     }
 
-    /* ==========================================================
-       TEMA CLARO / ESCURO
-       ========================================================== */
-    const raiz = document.documentElement;
-    const botaoTema = document.getElementById("botaoTema");
-    const iconeTema = document.getElementById("iconeTema");
-    const textoTema = document.getElementById("textoTema");
+    /* ==========================================================================
+       3. ALTERNÂNCIA DE TEMA (Claro / Escuro + localStorage + Preferência do SO)
+       ========================================================================== */
+    const themeToggleBtn = document.getElementById("theme-toggle");
+    const themeIcon = document.getElementById("theme-icon");
+    const themeLabel = document.getElementById("theme-label");
+    const htmlElement = document.documentElement;
 
     function aplicarTema(tema) {
-      raiz.setAttribute("data-tema", tema);
-      const escuro = tema === "escuro";
-      botaoTema.setAttribute("aria-pressed", String(escuro));
-      botaoTema.setAttribute("aria-label", escuro ? "Ativar tema claro" : "Ativar tema escuro");
-      iconeTema.textContent = escuro ? "☀️" : "🌙";
-      textoTema.textContent = escuro ? "Claro" : "Escuro";
+      const isDark = tema === "dark";
+      htmlElement.setAttribute("data-theme", tema);
+      themeToggleBtn.setAttribute("aria-pressed", String(isDark));
+      themeIcon.textContent = isDark ? "☀️" : "🌙";
+      themeLabel.textContent = isDark ? "Claro" : "Escuro";
     }
 
-    botaoTema.addEventListener("click", function () {
-      const novo = raiz.getAttribute("data-tema") === "escuro" ? "claro" : "escuro";
-      aplicarTema(novo);
-      try { localStorage.setItem("tema", novo); } catch (e) {}
+    function inicializarTema() {
+      const temaSalvo = localStorage.getItem("portfolio-theme");
+      if (temaSalvo) {
+        aplicarTema(temaSalvo);
+      } else {
+        const prefereEscuro = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        aplicarTema(prefereEscuro ? "dark" : "light");
+      }
+    }
+
+    themeToggleBtn.addEventListener("click", () => {
+      const temaAtual = htmlElement.getAttribute("data-theme");
+      const novoTema = temaAtual === "dark" ? "light" : "dark";
+      aplicarTema(novoTema);
+      localStorage.setItem("portfolio-theme", novoTema);
     });
 
-    // Acompanha mudanças do sistema, se o usuário ainda não escolheu manualmente
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (e) {
-      let salvo = null;
-      try { salvo = localStorage.getItem("tema"); } catch (err) {}
-      if (!salvo) aplicarTema(e.matches ? "escuro" : "claro");
-    });
-
-    /* ==========================================================
-       INICIALIZAÇÃO
-       ========================================================== */
-    aplicarTema(raiz.getAttribute("data-tema"));
+    // Atualiza o ano no rodapé e inicializa o site
+    document.getElementById("current-year").textContent = new Date().getFullYear();
+    inicializarTema();
     renderizarProjetos();
-    document.getElementById("ano").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
