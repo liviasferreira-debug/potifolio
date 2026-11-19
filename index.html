@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lívia | Projetos de Automação</title>
+  <meta name="description" content="Portfólio de Lívia com projetos de automação.">
+  <meta name="color-scheme" content="light dark">
+
+  <!-- Aplica o tema salvo (ou o do sistema) antes de renderizar, evitando "piscar" -->
+  <script>
+    (function () {
+      var tema = null;
+      try { tema = localStorage.getItem("tema"); } catch (e) {}
+      if (tema !== "claro" && tema !== "escuro") {
+        tema = window.matchMedia("(prefers-color-scheme: dark)").matches ? "escuro" : "claro";
+      }
+      document.documentElement.setAttribute("data-tema", tema);
+    })();
+  </script>
+
+  <style>
+    /* ==========================================================
+       1. VARIÁVEIS DE COR (TEMAS)
+       ========================================================== */
+    :root,
+    :root[data-tema="claro"] {
+      --bg: #f7f5fb;
+      --superficie: #ffffff;
+      --texto: #1f1b2e;
+      --texto-suave: #5a5470;
+      --borda: #ded8ee;
+      --destaque: #6d28d9;          /* roxo principal */
+      --destaque-hover: #5b21b6;
+      --nav-bg: #5b21b6;            /* fundo do menu */
+      --nav-texto: #ffffff;
+      --tag-bg: #ede9fe;
+      --tag-texto: #4c1d95;
+      --sombra: 0 2px 10px rgba(76, 29, 149, 0.10);
+      --foco: #f59e0b;
+    }
+
+    :root[data-tema="escuro"] {
+      --bg: #130f1f;
+      --superficie: #1d1730;
+      --texto: #efeaff;
+      --texto-suave: #b4abd1;
+      --borda: #3a2f5c;
+      --destaque: #a78bfa;
+      --destaque-hover: #c4b5fd;
+      --nav-bg: #3b1a7a;
+      --nav-texto: #ffffff;
+      --tag-bg: #2e2250;
+      --tag-texto: #ddd3ff;
+      --sombra: 0 2px 12px rgba(0, 0, 0, 0.45);
+      --foco: #fbbf24;
+    }
+
+    /* ==========================================================
+       2. BASE
+       ========================================================== */
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--texto);
+      transition: background 0.25s, color 0.25s;
+    }
+
+    a { color: var(--destaque); }
+    a:hover { color: var(--destaque-hover); }
+
+    :focus-visible {
+      outline: 3px solid var(--foco);
+      outline-offset: 2px;
+    }
+
+    .container {
+      width: min(1100px, 100% - 2rem);
+      margin-inline: auto;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .pular-conteudo {
+      position: absolute;
+      left: -999px;
+      top: 0;
+      background: var(--superficie);
+      color: var(--texto);
+      padding: 0.5rem 1rem;
+      z-index: 100;
+    }
+    .pular-conteudo:focus { left: 0; }
+
+    /* ==========================================================
+       3. MENU DE NAVEGAÇÃO (ROXO)
+       ========================================================== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--nav-bg);
+      color: var(--nav-texto);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      padding-block: 0.75rem;
+    }
+
+    .nav__marca {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--nav-texto);
+      text-decoration: none;
+    }
+
+    .nav__lista {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav__lista a {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      color: var(--nav-texto);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav__lista a:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: var(--nav-texto);
+    }
+
+    .nav :focus-visible { outline-color: #ffffff; }
+
+    .botao-tema {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--nav-texto);
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .botao-tema:hover { background: rgba(255, 255, 255, 0.18); }
+
+    /* ==========================================================
+       4. CABEÇALHO / APRESENTAÇÃO
+       ========================================================== */
+    .hero {
+      padding-block: 4rem 3rem;
+      border-bottom: 1px solid var(--borda);
+    }
+
+    .hero__ola {
+      margin: 0;
+      color: var(--destaque);
+      font-weight: 600;
+    }
+
+    .hero h1 {
+      margin: 0.25rem 0 1rem;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      max-width: 60ch;
+      margin: 0 0 1.5rem;
+      color: var(--texto-suave);
+      font-size: 1.1rem;
+    }
+
+    .botao {
+      display: inline-block;
+      padding: 0.7rem 1.4rem;
+      border-radius: 8px;
+      background: var(--nav-bg);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .botao:hover { background: var(--destaque-hover); color: #ffffff; }
+    :root[data-tema="escuro"] .botao:hover { background: #5b2db5; }
+
+    /* ==========================================================
+       5. SEÇÕES E GRADE DE PROJETOS
+       ========================================================== */
+    .secao { padding-block: 3rem; }
+
+    .secao h2 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+
+    .secao__intro {
+      margin: 0 0 2rem;
+      color: var(--texto-suave);
+    }
+
+    .grade {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      background: var(--superficie);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--sombra);
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); }
+
+    .card__img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card__corpo {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 1.25rem;
+    }
+
+    .card h3 { margin: 0 0 0.5rem; font-size: 1.15rem; }
+
+    .card p {
+      margin: 0 0 1rem;
+      color: var(--texto-suave);
+      flex: 1;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      list-style: none;
+      margin: 0 0 1rem;
+      padding: 0;
+    }
+
+    .tags li {
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      background: var(--tag-bg);
+      color: var(--tag-texto);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .card__link { font-weight: 600; }
+
+    /* ==========================================================
+       6. RODAPÉ
+       ========================================================== */
+    .rodape {
+      margin-top: 2rem;
+      padding-block: 1.5rem;
+      border-top: 1px solid var(--borda);
+      color: var(--texto-suave);
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- ===================== MENU ===================== -->
+  <header>
+    <nav class="nav" aria-label="Navegação principal">
+      <div class="container">
+        <a class="nav__marca" href="#inicio">Lívia</a>
+
+        <ul class="nav__lista">
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#projetos">Projetos</a></li>
+          <!-- NOVAS SEÇÕES: adicione aqui um <li><a href="#id-da-secao">…</a></li> -->
+          <li>
+            <button type="button" class="botao-tema" id="botaoTema" aria-pressed="false" aria-label="Ativar tema escuro">
+              <span id="iconeTema" aria-hidden="true">🌙</span>
+              <span id="textoTema">Escuro</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main id="conteudo">
+
+    <!-- ===================== APRESENTAÇÃO ===================== -->
+    <section class="hero" id="inicio" aria-labelledby="titulo-inicio">
+      <div class="container">
+        <p class="hero__ola">Olá, eu sou</p>
+        <h1 id="titulo-inicio">Lívia</h1>
+        <!-- EXEMPLO: substitua pela sua apresentação real -->
+        <p>
+          Eu transformo tarefas repetitivas em processos automáticos. Aqui você encontra
+          alguns dos meus projetos de automação, feitos para economizar tempo e reduzir erros.
+        </p>
+        <a class="botao" href="#projetos">Ver projetos</a>
+      </div>
+    </section>
+
+    <!-- ===================== PROJETOS ===================== -->
+    <section class="secao" id="projetos" aria-labelledby="titulo-projetos">
+      <div class="container">
+        <h2 id="titulo-projetos">Projetos de automação</h2>
+        <p class="secao__intro">Uma seleção dos projetos em que venho trabalhando.</p>
+
+        <div class="grade" id="gradeProjetos"></div>
+      </div>
+    </section>
+
+    <!-- NOVAS SEÇÕES: copie o bloco <section class="secao" id="…"> acima e ajuste o conteúdo -->
+
+  </main>
+
+  <!-- ===================== RODAPÉ ===================== -->
+  <footer class="rodape">
+    <div class="container">
+      <p>© <span id="ano"></span> Lívia. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    /* ==========================================================
+       LISTA DE PROJETOS
+       Para adicionar um projeto, inclua um novo objeto no array.
+       Campos:
+         titulo      (obrigatório)
+         descricao   (obrigatório)
+         tecnologias (lista de textos)
+         link        (opcional) URL do projeto ou repositório
+         imagem      (opcional) URL/caminho de uma imagem
+         alt         (obrigatório se houver imagem) texto alternativo
+       ========================================================== */
+    const projetos = [
+      // EXEMPLOS: substitua pelos seus projetos reais
+      {
+        titulo: "Relatórios automáticos por e-mail",
+        descricao: "Exemplo: script que coleta dados de planilhas, gera um relatório semanal e envia por e-mail à equipe.",
+        tecnologias: ["Python", "Pandas", "SMTP"],
+        link: "https://github.com/"
+      },
+      {
+        titulo: "Organizador de arquivos",
+        descricao: "Exemplo: rotina que separa e renomeia arquivos baixados por tipo e data, mantendo as pastas em ordem.",
+        tecnologias: ["Python", "Shell"]
+      },
+      {
+        titulo: "Bot de notificações",
+        descricao: "Exemplo: bot que monitora um serviço e avisa no chat quando algo muda ou falha.",
+        tecnologias: ["Node.js", "API", "Webhooks"],
+        link: "https://github.com/"
+      }
+      // ADICIONE NOVOS PROJETOS AQUI (lembre da vírgula após o item anterior)
+    ];
+
+    /* ==========================================================
+       RENDERIZAÇÃO DOS CARDS
+       ========================================================== */
+    function criarCard(projeto) {
+      const card = document.createElement("article");
+      card.className = "card";
+
+      if (projeto.imagem) {
+        const img = document.createElement("img");
+        img.className = "card__img";
+        img.src = projeto.imagem;
+        img.alt = projeto.alt || "";
+        img.loading = "lazy";
+        card.appendChild(img);
+      }
+
+      const corpo = document.createElement("div");
+      corpo.className = "card__corpo";
+
+      const titulo = document.createElement("h3");
+      titulo.textContent = projeto.titulo;
+      corpo.appendChild(titulo);
+
+      const descricao = document.createElement("p");
+      descricao.textContent = projeto.descricao;
+      corpo.appendChild(descricao);
+
+      if (projeto.tecnologias && projeto.tecnologias.length) {
+        const lista = document.createElement("ul");
+        lista.className = "tags";
+        lista.setAttribute("aria-label", "Tecnologias utilizadas");
+        projeto.tecnologias.forEach(function (tec) {
+          const item = document.createElement("li");
+          item.textContent = tec;
+          lista.appendChild(item);
+        });
+        corpo.appendChild(lista);
+      }
+
+      if (projeto.link) {
+        const a = document.createElement("a");
+        a.className = "card__link";
+        a.href = projeto.link;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = "Ver projeto →";
+        a.setAttribute("aria-label", "Ver projeto " + projeto.titulo + " (abre em nova aba)");
+        corpo.appendChild(a);
+      }
+
+      card.appendChild(corpo);
+      return card;
+    }
+
+    function renderizarProjetos() {
+      const grade = document.getElementById("gradeProjetos");
+      grade.innerHTML = "";
+      projetos.forEach(function (p) { grade.appendChild(criarCard(p)); });
+    }
+
+    /* ==========================================================
+       TEMA CLARO / ESCURO
+       ========================================================== */
+    const raiz = document.documentElement;
+    const botaoTema = document.getElementById("botaoTema");
+    const iconeTema = document.getElementById("iconeTema");
+    const textoTema = document.getElementById("textoTema");
+
+    function aplicarTema(tema) {
+      raiz.setAttribute("data-tema", tema);
+      const escuro = tema === "escuro";
+      botaoTema.setAttribute("aria-pressed", String(escuro));
+      botaoTema.setAttribute("aria-label", escuro ? "Ativar tema claro" : "Ativar tema escuro");
+      iconeTema.textContent = escuro ? "☀️" : "🌙";
+      textoTema.textContent = escuro ? "Claro" : "Escuro";
+    }
+
+    botaoTema.addEventListener("click", function () {
+      const novo = raiz.getAttribute("data-tema") === "escuro" ? "claro" : "escuro";
+      aplicarTema(novo);
+      try { localStorage.setItem("tema", novo); } catch (e) {}
+    });
+
+    // Acompanha mudanças do sistema, se o usuário ainda não escolheu manualmente
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (e) {
+      let salvo = null;
+      try { salvo = localStorage.getItem("tema"); } catch (err) {}
+      if (!salvo) aplicarTema(e.matches ? "escuro" : "claro");
+    });
+
+    /* ==========================================================
+       INICIALIZAÇÃO
+       ========================================================== */
+    aplicarTema(raiz.getAttribute("data-tema"));
+    renderizarProjetos();
+    document.getElementById("ano").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
